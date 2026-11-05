@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KINETIC.OS — Multi-Mode Kinetic Canvas Slider</title>
+  <meta name="description" content="Next-generation multi-mode interactive slider with 3D Cube, Split Curtain, Depth Stack, and Iris Warp transition engines.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@500;700;800&family=Plus+Jakarta+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-mode="cube" data-axis="horizontal">
+
+  <!-- Holographic Crosshair Cursor -->
+  <div class="cyber-cursor" id="cursor">
+    <div class="cursor-crosshair"></div>
+    <div class="cursor-hud">
+      <span class="hud-coords" id="cursorCoords">X:000 Y:000</span>
+      <span class="hud-state" id="cursorState">SEEK</span>
+    </div>
+  </div>
+
+  <!-- Ambient Cyber Backdrop Grid -->
+  <div class="cyber-grid"></div>
+  <div class="ambient-nebula" id="ambientNebula"></div>
+  <div class="scanlines"></div>
+
+  <!-- Top Navigation & Mode Selector Deck -->
+  <header class="os-header">
+    <div class="os-brand">
+      <div class="brand-glyph">
+        <span class="glyph-core"></span>
+      </div>
+      <div class="brand-info">
+        <div class="brand-title">KINETIC.OS</div>
+        <div class="brand-version">v3.8 // TRANSITION MATRIX</div>
+      </div>
+    </div>
+
+    <!-- Sliding Mode Switcher (The centerpiece feature!) -->
+    <nav class="mode-switcher-bar" aria-label="Sliding Mode Switcher">
+      <span class="switcher-label">ENGINE:</span>
+      <div class="mode-pills" role="radiogroup">
+        <button class="mode-pill active" data-mode="cube" role="radio" aria-checked="true">
+          <span class="pill-dot"></span>
+          <span>3D CUBE</span>
+        </button>
+        <button class="mode-pill" data-mode="split" role="radio" aria-checked="false">
+          <span class="pill-dot"></span>
+          <span>SPLIT CURTAIN</span>
+        </button>
+        <button class="mode-pill" data-mode="stack" role="radio" aria-checked="false">
+          <span class="pill-dot"></span>
+          <span>DEPTH STACK</span>
+        </button>
+        <button class="mode-pill" data-mode="iris" role="radio" aria-checked="false">
+          <span class="pill-dot"></span>
+          <span>IRIS WARP</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Header Tools (Axis Toggle, Speed & Audio) -->
+    <div class="os-tools">
+      <!-- Axis Toggle -->
+      <button class="tool-btn" id="axisToggle" title="Toggle Slide Axis (Horizontal / Vertical)">
+        <span class="tool-label">AXIS:</span>
+        <span class="tool-val" id="axisDisplay">HORIZ</span>
+      </button>
+
+      <!-- Speed Toggle -->
+      <button class="tool-btn" id="speedToggle" title="Cycle Transition Speed">
+        <span class="tool-label">SPEED:</span>
+        <span class="tool-val" id="speedDisplay">0.8S</span>
+      </button>
+
+      <!-- Audio Toggle -->
+      <button class="tool-btn audio-btn" id="audioToggle" title="Toggle Futuristic UI Audio">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <path class="sound-wave" d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          <path class="sound-wave" d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+        </svg>
+        <span class="tool-val" id="audioStatus">SFX OFF</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Viewport Arena -->
+  <main class="slider-arena" id="sliderArena">
+
+    <!-- The 3D Transformation Stage -->
+    <div class="stage-perspective" id="stagePerspective">
+      <div class="slides-track" id="slidesTrack">
+
+        <!-- Slide 01: Quantum Core -->
+        <article class="slide-card active" data-index="0" data-accent="#00ff88" data-theme="quantum">
+          <div class="slide-inner">
+            <!-- Left Splice / Half (Used in Split Curtain Mode) -->
+            <div class="slide-splice splice-left">
+              <div class="image-wrap">
+                <img src="assets/cyber1.jpg" alt="Quantum Core Iridescent Visual" class="slide-media" draggable="false">
+                <div class="media-overlay"></div>
+                <div class="glitch-line"></div>
+              </div>
+            </div>
+
+            <!-- Right Splice / Half -->
+            <div class="slide-splice splice-right">
+              <div class="image-wrap">
+                <img src="assets/cyber1.jpg" alt="Quantum Core Iridescent Visual" class="slide-media" draggable="false">
+                <div class="media-overlay"></div>
+                <div class="glitch-line"></div>
+              </div>
+            </div>
+
+            <!-- Foreground Cyber Content -->
+            <div class="card-content">
+              <div class="content-header">
+                <span class="cyber-badge">PROTOTYPE // 001</span>
+                <span class="telemetry">FREQ: 840 THz · COHERENCE 99.8%</span>
+              </div>
+              <h2 class="card-title">
+                <span class="title-primary">QUANTUM</span>
+                <span class="title-accent">SYNTHESIS</span>
+              </h2>
+              <p class="card-description">
+                Sub-atomic electromagnetic lattice capturing self-assembling photonic matrices in high-density vacuum chambers.
+              </p>
+              <div class="tech-specs-row">
+                <div class="spec-node">
+                  <span class="k">FIELD</span>
+                  <span class="v">12.4 TESLA</span>
+                </div>
+                <div class="spec-node">
+                  <span class="k">ENTROPY</span>
+                  <span class="v">ΔS &lt; 0.001</span>
+                </div>
+                <div class="spec-node">
+                  <span class="k">LATTICE</span>
+                  <span class="v">HEX-CHIRAL</span>
+                </div>
+              </div>
+              <div class="action-row">
+                <button class="cyber-cta">
+                  <span>ENGAGE CORE</span>
+                  <span class="cta-arrow">→</span>
+                </button>
+                <button class="cyber-hollow">TELEMETRY DATA</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 02: Fluid Chrome -->
+        <article class="slide-card" data-index="1" data-accent="#00e5ff" data-theme="fluid">
+          <div class="slide-inner">
+            <div class="slide-splice splice-left">
+              <div class="image-wrap">
+                <img src="assets/cyber2.jpg" alt="Fluid Chrome Surface" class="slide-media" draggable="false">
+                <div class="media-overlay"></div>
+                <div class="glitch-line"></div>
+              </div>
+            </div>
+            <div class="slide-splice splice-right">
+              <div class="image-wrap">
+                <img src="assets/cyber2.jpg" alt="Fluid Chrome Surface" class="slide-media" draggable="false">
+                <div class="media-overlay"></div>
+                <div class="glitch-line"></div>
+              </div>
+            </div>
+            <div class="card-content">
+              <div class="content-header">
+                <span class="cyber-badge">MATERIAL // 002</span>
+                <span class="telemetry">VISCOSITY: 0.04 cP · CONDUCTIVE</span>
+              </div>
+              <h2 class="card-title">
+                <span class="title-primary">NEO-CHROME</span>
+                <span class="title-accent">MERCURY</span>
+              </h2>
+              <p class="card-description">
+                Ferrofluidic liquid metal alloys dynamically reacting to spatial acoustic vibrations and neural magnetic impulses.
+              </p>
+              <div class="tech-specs-row">
+                <div class="spec-node">
+                  <span class="k">SURFACE</span>
+                  <span class="v">MIRROR 99.4%</span>
+                </div>
+                <div class="spec-node">
+                  <span class="k">RESPONSE</span>
+                  <span class="v">0.2 MS</span>
+                </div>
+                <div class="spec-node">
+                  <span class="k">DENSITY</span>
+                  <span class="v">13.53 g/cm³</span>
+                </div>
+              </div>
+              <div class="action-row">
+                <button class="cyber-cta">
+                  <span>ENGAGE CORE</span>
+                  <span class="cta-arrow">→</span>
+                </button>
+                <button class="cyber-hollow">TELEMETRY DATA</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 03: Neural Sphere -->
+        <article class="slide-card" data-index="2" data-accent="#8b5cf6" data-theme="neural">
+          <div class="slide-inner">
+            <div class="slide-splice splice-left">
+              <div class="image-wrap">
+                <img src="assets/cyber3.jpg" alt="Neural Hologram Sphere" class="slide-media" draggable="false">
+                <div class="media-overlay"></div>
+                <div class="glitch-line"></div>
+              </div>
+            </div>
+            <div class="slide-splice splice-right">
+              <div class="image-wrap">
+                <img src="assets/cyber3.jpg" alt="Neural Hologram Sphere" class="slide-media" draggable="false">
+                <div class="media-overlay"></div>
+                <div class="glitch-line"></div>
+              </div>
+            </div>
+            <div class="card-content">
+              <div class="content-header">
+                <span class="cyber-badge">INTERFACE // 003</span>
+                <span class="telemetry">NODES: 1.04B · SYNAPSE PULSE</span>
+              </div>
+              <h2 class="card-title">
+                <span class="title-primary">CORTEX</span>
+                <span class="title-accent">HOLOGRAM</span>
+              </h2>
+              <p class="card-description">
+                Volumetric light-field projections rendering multidimensional tensor weights directly into physical optical space.
+              </p>
+              <div class="tech-specs-row">
+                <div class="spec-node">
+                  <span class="k">VOXELS</span>
+                  <span class="v">64 GIGA-VOX</span>
+                </div>
+                <div class="spec-node">
+                  <span class="k">DEPTH</span>
+                  <span class="v">TRUE 3D</span>
+                </div>
+                <div class="spec-node">
+                  <span class="k">REFRESH</span>
+                  <span class="v">240 HZ</span>
+                </div>
+              </div>
+              <div class="action-row">
+                <button class="cyber-cta">
+                  <span>ENGAGE CORE</span>
+                  <span class="cta-arrow">→</span>
+                </button>
+                <button class="cyber-hollow">TELEMETRY DATA</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 04: Orbital Horizon -->
+        <article class="slide-card" data-index="3" data-accent="#ff0055" data-theme="orbital">
+          <div class="slide-inner">
+            <div class="slide-splice splice-left">
+              <div class="image-wrap">
+                <img src="assets/cyber4.jpg" alt="Orbital Solar Horizon" class="slide-media" draggable="false">
+                <div class="media-overlay"></div>
+                <div class="glitch-line"></div>
+              </div>
+            </div>
+            <div class="slide-splice splice-right">
+              <div class="image-wrap">
+                <img src="assets/cyber4.jpg" alt="Orbital Solar Horizon" class="slide-media" draggable="false">
+                <div class="media-overlay"></div>
+                <div class="glitch-line"></div>
+              </div>
+            </div>
+            <div class="card-content">
+              <div class="content-header">
+                <span class="cyber-badge">OUTPOST // 004</span>
+                <span class="telemetry">ALTITUDE: 420 KM · EQUATORIAL</span>
+              </div>
+              <h2 class="card-title">
+                <span class="title-primary">SOLARIS</span>
+                <span class="title-accent">PERIGEE</span>
+              </h2>
+              <p class="card-description">
+                High-aperture solar collectors orbiting through thermonuclear coronal flares to power planetary quantum transmitters.
+              </p>
+              <div class="tech-specs-row">
+                <div class="spec-node">
+                  <span class="k">SOLAR HARVEST</span>
+                  <span class="v">84 GW</span>
+                </div>
+                <div class="spec-node">
+                  <span class="k">THERMAL</span>
+                  <span class="v">4,200 K</span>
+                </div>
+                <div class="spec-node">
+                  <span class="k">SHIELD</span>
+                  <span class="v">PLASMA 100%</span>
+                </div>
+              </div>
+              <div class="action-row">
+                <button class="cyber-cta">
+                  <span>ENGAGE CORE</span>
+                  <span class="cta-arrow">→</span>
+                </button>
+                <button class="cyber-hollow">TELEMETRY DATA</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 05: Deep Station -->
+        <article class="slide-card" data-index="4" data-accent="#ffbb00" data-theme="station">
+          <div class="slide-inner">
+            <div class="slide-splice splice-left">
+              <div class="image-wrap">
+                <img src="assets/cyber5.jpg" alt="Deep Space Megastructure" class="slide-media" draggable="false">
+                <div class="media-overlay"></div>
+                <div class="glitch-line"></div>
+              </div>
+            </div>
+            <div class="slide-splice splice-right">
+              <div class="image-wrap">
+                <img src="assets/cyber5.jpg" alt="Deep Space Megastructure" class="slide-media" draggable="false">
+                <div class="media-overlay"></div>
+                <div class="glitch-line"></div>
+              </div>
+            </div>
+            <div class="card-content">
+              <div class="content-header">
+                <span class="cyber-badge">MONOLITH // 005</span>
+                <span class="telemetry">SECTOR: 09-OMEGA · DEEP VOID</span>
+              </div>
+              <h2 class="card-title">
+                <span class="title-primary">AETHER</span>
+                <span class="title-accent">STATION</span>
+              </h2>
+              <p class="card-description">
+                Autonomous robotic mega-structure refining dark matter filaments into relativistic warp propulsion conduits.
+              </p>
+              <div class="tech-specs-row">
+                <div class="spec-node">
+                  <span class="k">MASS</span>
+                  <span class="v">4.8 MT</span>
+                </div>
+                <div class="spec-node">
+                  <span class="k">WARP FACTOR</span>
+                  <span class="v">9.975</span>
+                </div>
+                <div class="spec-node">
+                  <span class="k">AI CORE</span>
+                  <span class="v">LEVEL 5 SENTIENT</span>
+                </div>
+              </div>
+              <div class="action-row">
+                <button class="cyber-cta">
+                  <span>ENGAGE CORE</span>
+                  <span class="cta-arrow">→</span>
+                </button>
+                <button class="cyber-hollow">TELEMETRY DATA</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+
+    <!-- Interactive Navigation Arrows -->
+    <button class="nav-trigger prev-trigger" id="prevTrigger" aria-label="Previous Slide">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+      <span class="trigger-label">PREV</span>
+    </button>
+
+    <button class="nav-trigger next-trigger" id="nextTrigger" aria-label="Next Slide">
+      <span class="trigger-label">NEXT</span>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
+  </main>
+
+  <!-- Bottom Command Cockpit -->
+  <footer class="cockpit-dock">
+    <!-- Index Telemetry -->
+    <div class="cockpit-left">
+      <div class="index-box">
+        <span class="active-num" id="activeNum">01</span>
+        <span class="index-sep">/</span>
+        <span class="total-num">05</span>
+      </div>
+      <div class="system-status">
+        <span class="pulse-indicator"></span>
+        <span class="status-text">KINETIC ENGINE ONLINE</span>
+      </div>
+    </div>
+
+    <!-- Center: Interactive Rotary Scrubber & Timeline -->
+    <div class="cockpit-center">
+      <div class="scrubber-track" id="scrubberTrack">
+        <div class="scrub-node active" data-goto="0"><span class="tick"></span><span class="node-label">01</span></div>
+        <div class="scrub-node" data-goto="1"><span class="tick"></span><span class="node-label">02</span></div>
+        <div class="scrub-node" data-goto="2"><span class="tick"></span><span class="node-label">03</span></div>
+        <div class="scrub-node" data-goto="3"><span class="tick"></span><span class="node-label">04</span></div>
+        <div class="scrub-node" data-goto="4"><span class="tick"></span><span class="node-label">05</span></div>
+        <div class="scrubber-indicator" id="scrubberIndicator"></div>
+      </div>
+      <div class="mode-info-tag">
+        <span id="currentModeDescription">CUBE 3D: Volumetric spatial cube revolution</span>
+      </div>
+    </div>
+
+    <!-- Right: Mini Preview Cards -->
+    <div class="cockpit-right">
+      <div class="mini-deck">
+        <div class="mini-card active" data-goto="0"><img src="assets/cyber1.jpg" alt="Mini 1"></div>
+        <div class="mini-card" data-goto="1"><img src="assets/cyber2.jpg" alt="Mini 2"></div>
+        <div class="mini-card" data-goto="2"><img src="assets/cyber3.jpg" alt="Mini 3"></div>
+        <div class="mini-card" data-goto="3"><img src="assets/cyber4.jpg" alt="Mini 4"></div>
+        <div class="mini-card" data-goto="4"><img src="assets/cyber5.jpg" alt="Mini 5"></div>
+      </div>
+      <button class="hotkey-hint-btn" id="hintBtn" title="View keyboard shortcuts">KEYS [?]</button>
+    </div>
+  </footer>
+
+  <!-- Keyboard Shortcuts Modal -->
+  <dialog class="keys-dialog" id="keysDialog">
+    <div class="dialog-content">
+      <div class="dialog-header">
+        <h3>HOTKEY COMMANDS</h3>
+        <button class="dialog-close" id="dialogClose">✕</button>
+      </div>
+      <div class="hotkey-list">
+        <div class="hotkey-row"><kbd>←</kbd> / <kbd>→</kbd><span>Previous / Next Slide</span></div>
+        <div class="hotkey-row"><kbd>↑</kbd> / <kbd>↓</kbd><span>Previous / Next (or in Vertical mode)</span></div>
+        <div class="hotkey-row"><kbd>Scroll</kbd><span>Mouse Wheel smooth sliding</span></div>
+        <div class="hotkey-row"><kbd>1</kbd> - <kbd>4</kbd><span>Switch Transition Mode (Cube, Split, Stack, Iris)</span></div>
+        <div class="hotkey-row"><kbd>A</kbd><span>Toggle Axis (Horizontal / Vertical)</span></div>
+        <div class="hotkey-row"><kbd>S</kbd><span>Toggle Speed (0.4s / 0.8s / 1.5s)</span></div>
+        <div class="hotkey-row"><kbd>M</kbd><span>Toggle Audio SFX</span></div>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="kinetic-slider.js"></script>
+</body>
+</html>
